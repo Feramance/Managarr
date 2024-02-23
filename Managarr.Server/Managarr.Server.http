@@ -1,6 +1,33 @@
-@Managarr.Server_HostAddress = http://localhost:5034
+@Managarr.Server_HostAddress = http://localhost:5003
 
-GET {{Managarr.Server_HostAddress}}/weatherforecast/
+GET {{Managarr.Server_HostAddress}}/radarr/
 Accept: application/json
+
+###
+
+PUT {{Managarr.Server_HostAddress}}/radarr/
+Content-Type: application/json
+
+{
+    "hash": "1-Radarr",
+    "id": 1,
+    "title": "A View to a Kill",
+    "monitored": true,
+    "tmdbId": 707,
+    "year": 1985,
+    "searched": false,
+    "isRequest": false,
+    "upgrade": false,
+    "isAvailable": true,
+    "movieFiles": [
+        {
+            "movieFileId": 1266,
+            "qualityMet": false,
+            "customFormatMet": true,
+            "customFormatScore": 60
+        }
+    ],
+    "instanceName": "Radarr"
+},
 
 ###
