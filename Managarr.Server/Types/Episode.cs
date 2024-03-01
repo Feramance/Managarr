@@ -1,39 +1,41 @@
 ﻿namespace Managarr.Server.Types
 {
-    public class Movie
+    public class Episode
     {
         public int id { get; set; }
         public string? title { get; set; }
+        public int episodeNumber { get; set; }
         public bool monitored { get; set; }
-        public int tmdbId { get; set; }
-        public int year { get; set; }
+        public int tvdbId { get; set; }
+        public int airDateUtc { get; set; }
         public bool searched { get; set; }
         public bool isRequest { get; set; }
         public bool upgrade { get; set; }
         public bool isAvailable { get; set; }
         public bool hasFile { get; set; }
         public int minCustomFormatScore { get; set; }
-        public ICollection<MediaFile> movieFiles { get; set; }
+        public ICollection<MediaFile> episodeFiles { get; set; }
         public string instanceName { get; set; }
-        public Movie()
+        public Episode()
         {
-            this.movieFiles = [];
+            this.episodeFiles = [];
         }
 
-        public Movie(int id, string title, bool monitored, int tmdbId, int year, bool searched, bool isRequest, bool upgrade, bool isAvailable, bool hasFile, int minCustomFormatScore, ICollection<MediaFile> movieFiles, string instanceName)
+        public Episode(int id, string title, int seasonNumber, int episodeNumber, bool monitored, int tvdbId, int airDateUtc, bool searched, bool isRequest, bool upgrade, bool isAvailable, bool hasFile, int minCustomFormatScore, ICollection<MediaFile> episodeFiles, string instanceName)
         {
             this.id = id;
             this.title = title;
+            this.episodeNumber = episodeNumber;
             this.monitored = monitored;
-            this.tmdbId = tmdbId;
-            this.year = year;
+            this.tvdbId = tvdbId;
+            this.airDateUtc = airDateUtc;
             this.searched = searched;
             this.isRequest = isRequest;
             this.upgrade = upgrade;
             this.isAvailable = isAvailable;
             this.hasFile = hasFile;
             this.minCustomFormatScore = minCustomFormatScore;
-            this.movieFiles = movieFiles;
+            this.episodeFiles = episodeFiles;
             this.instanceName = instanceName;
         }
     }

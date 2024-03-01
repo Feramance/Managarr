@@ -1,6 +1,9 @@
+using Managarr.Server;
+using Managarr.Server.Initializers;
+
 internal class Program
 {
-    private static void Main(string[] args)
+    private static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +13,9 @@ internal class Program
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+
+        builder.Services.AddAsyncInitializer<InitDatabase>();
+        builder.Services.AddAsyncInitializer<InitConfig>();
 
         var app = builder.Build();
 
@@ -31,6 +37,8 @@ internal class Program
 
         app.MapFallbackToFile("/index.html");
 
-        app.Run();
+        await app.InitAsync();
+
+        app.StartAsync();
     }
 }

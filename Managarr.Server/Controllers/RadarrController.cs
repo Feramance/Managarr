@@ -18,55 +18,60 @@ namespace Managarr.Server.Controllers
         public RadarrController(ILogger<RadarrController> logger)
         {
             _logger = logger;
-            radarrapis = new List<RadarrAPI>();
-            movies = new List<Movie>();
-            radarrapis.Add(new RadarrAPI("http://192.168.0.172:7878", "6f55c4d4ba984306b4750bf4825747dd", "Radarr"));
-            radarrapis.Add(new RadarrAPI("http://192.168.0.172:7879", "111cd69da1544173b0b95ed451fef632", "Radarr4K"));
+            radarrapis =
+            [
+                new RadarrAPI(new Uri("http://192.168.0.172:7878"), "6f55c4d4ba984306b4750bf4825747dd", "Radarr"),
+                new RadarrAPI(new Uri("http://192.168.0.172:7879"), "111cd69da1544173b0b95ed451fef632", "Radarr4K"),
+            ];
             radarr = new Radarr(radarrapis);
         }
 
-        [HttpGet(Name = "GetMovies")]
-        public IEnumerable<Movie> GetMovies()
+        [HttpGet("movies", Name = "GetMovies")]
+        public IEnumerable<Movie> GetMovies(string instance = null)
         {
             List<Movie> movies = new List<Movie>();
-            foreach (RadarrAPI r in radarr.radarrApis)
+            if (!string.IsNullOrEmpty(instance))
             {
-                movies.AddRange(r.Movies);
+                movies = radarr.radarrApis.FirstOrDefault(r => r.Name == instance).Movies;
             }
-            return movies;
-        }
-
-        [HttpGet("{hash}",Name = "GetMovie")]
-        public IEnumerable<Movie> GetMovie(string hash)
-        {
-            Movie finalMovie = null;
-            foreach (RadarrAPI r in radarr.radarrApis)
+            else
             {
-                Movie movie = r.Movies.Where(r => r.Hash == hash).FirstOrDefault();
-                if (movie.Hash == hash)
+                foreach (RadarrAPI r in radarr.radarrApis)
                 {
-                    finalMovie = movie;
-                    break;
+                    if (r.Movies != null || r.Movies.Count != 0)
+                    {
+                        movies.AddRange(r.Movies);
+                    }
                 }
             }
-            yield return finalMovie;
+            foreach (Movie movie in movies)
+            {
+                yield return movie;
+            }
         }
 
-        [HttpPut("{hash}", Name = "UpdateMovie")]
-        public IActionResult UpdateMovie(string hash, Movie movie)
+        [HttpGet("movie", Name = "GetMovie")]
+        public IActionResult GetMovie(string instance, int id)
         {
-            if (hash != movie.Hash)
+            Movie movie = radarr.GetMovie(instance, id);
+            return movie == null? NotFound() : Ok(movie);
+        }
+
+        [HttpPut("{instanceName}/{id}", Name = "UpdateMovie")]
+        public IActionResult UpdateMovie(string instanceName, int id, Movie movie)
+        {
+            if (id != movie.id)
             {
                 return BadRequest();
             }
 
-            Movie existingMovie = radarr.GetMovie(hash);
+            Movie existingMovie = radarr.GetMovie(instanceName, id);
             if (existingMovie is null)
             {
                 return NotFound();
             }
 
-            radarr.UpdateMovie(existingMovie);
+            radarr.UpdateMovie(instanceName, id, existingMovie);
 
             return Ok(existingMovie);
         }

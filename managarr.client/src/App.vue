@@ -4,40 +4,67 @@
 
 <template>
     <header>
-        <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-        <div class="wrapper">
-            <MoviesTable msg="You did it!" />
-        </div>
+        <img alt="Vue logo" class="logo" src="./assets/logo.svg" />
+        <h1>Managarr</h1>
     </header>
-
+    <section class="layout">
+        <div class="sidebar">
+            Sidebar
+        </div>
+        <div class="body">
+            <div class="wrapper">
+                <MoviesTable msg="You did it!" />
+            </div>
+        </div>
+    </section>
 </template>
 
 <style scoped>
+.layout {
+    display: grid;
+    grid: "sidebar body" 1fr / auto 1fr;
+    gap: 8px;
+    margin-top: 5%;
+    margin-bottom: 0;
+    width: 100%;
+}
+
+.sidebar {
+    grid-area: sidebar;
+    width: 15%;
+    height: 95%;
+    margin: 0;
+    padding: 0;
+}
+
+.body {
+    grid-area: body;
+    width: 85%;
+    height: 95%;
+    margin: 0;
+    padding: 0;
+}
+
 header {
-  line-height: 1.5;
+    display:block;
+  top: 0;
+  width: 100%;
+  height: max-content;
+  max-height: 5%;
+  position: fixed;
+  padding: 10px 0;
 }
 
 .logo {
-  display: block;
-  margin: 0 auto 2rem;
+    left: 0;
+    display: inline-block;
+    width: 30px;
+    height: auto;
 }
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+h1 {
+    display: inline-block;
+    margin-left: 2%;
+    text-align: center;
 }
 </style>
